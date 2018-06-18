@@ -19,12 +19,17 @@ mysql = MySQL(app)
 
 @app.route('/')
 def index():
-    return render_template('home.html')
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM pages WHERE id='1'")
+    page = cur.fetchone()
+    return render_template('home.html', page=page)
 
 
 @app.route('/about')
 def about():
-    return render_template('about.html')
+    page = {'titre': 'à propos',
+            'description': "Qui est ce débutant ?"}
+    return render_template('about.html', page=page)
 
 
 @app.route('/articles')
@@ -32,7 +37,9 @@ def articles():
     cur = mysql.connection.cursor()
     cur.execute("SELECT * FROM articles")
     articles = cur.fetchall()
-    return render_template('articles.html', articles=articles)
+    page = {'titre': 'Articles',
+            'description': 'Liste des articles écrits par un débutant'}
+    return render_template('articles.html', articles=articles, page=page)
     cur.close()
 
 
@@ -126,7 +133,6 @@ def add_article():
     return render_template('add_article.html', form=form)
 
 
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -166,18 +172,22 @@ def login():
 
     return render_template('login.html')
 
+
 @app.route('/dashboard')
 @is_logged_in
 def dashboard():
     return render_template('dashboard.html')
 
 # Logout
+
+
 @app.route('/logout')
 def logout():
     session.clear()
     flash('You are now logged out')
     return render_template('login.html')
 
+
 if __name__ == '__main__':
-    app.secret_key="secret123"
+    app.secret_key = "secret123"
     app.run(debug=True)
