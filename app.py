@@ -17,18 +17,22 @@ app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 mysql = MySQL(app)
 
 
+def page_data(title):
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM pages WHERE title = '{0}'".format(title))
+    page = cur.fetchone()
+    return page
+
+
 @app.route('/')
 def index():
-    cur = mysql.connection.cursor()
-    cur.execute("SELECT * FROM pages WHERE id='1'")
-    page = cur.fetchone()
+    page = page_data("Hello world")
     return render_template('home.html', page=page)
 
 
 @app.route('/about')
 def about():
-    page = {'titre': 'à propos',
-            'description': "Qui est ce débutant ?"}
+    page = page_data("à propos")
     return render_template('about.html', page=page)
 
 
@@ -37,8 +41,7 @@ def articles():
     cur = mysql.connection.cursor()
     cur.execute("SELECT * FROM articles")
     articles = cur.fetchall()
-    page = {'titre': 'Articles',
-            'description': 'Liste des articles écrits par un débutant'}
+    page = page_data("Articles")
     return render_template('articles.html', articles=articles, page=page)
     cur.close()
 
@@ -88,10 +91,10 @@ def register():
         cur.close()
 
         flash('you are now registered and can log in', 'success')
-
-        return redirect(url_for('login'))
-
-    return render_template('register.html', form=form)
+        page = page_data("Connexion")
+        return redirect(url_for('login'), page=page)
+    page = page_data("Inscription")
+    return render_template('register.html', form=form, page=page)
 
 
 # Check if user logged in
@@ -102,7 +105,8 @@ def is_logged_in(f):
             return f(*args, **kwargs)
         else:
             flash('Unauthorized, Please login', 'danger')
-            return redirect(url_for('login'))
+            page = page_data("Connexion")
+            return redirect(url_for('login'), page=page)
     return wrap
 
 
@@ -127,10 +131,10 @@ def add_article():
         cur.close()
 
         flash('Article add successfully', 'success')
-
-        return redirect(url_for('dashboard'))
-
-    return render_template('add_article.html', form=form)
+        page = page_data("Tableau de bord")
+        return redirect(url_for('dashboard'), page=page)
+    page = page_data("ajout d'article")
+    return render_template('add_article.html', form=form, page=page)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -176,7 +180,8 @@ def login():
 @app.route('/dashboard')
 @is_logged_in
 def dashboard():
-    return render_template('dashboard.html')
+    page = page_data("Tableau de bord")
+    return render_template('dashboard.html', page=page)
 
 # Logout
 

@@ -1,10 +1,15 @@
-    <header class="masthead"
-     style="background-image: url({{ url_for('static', filename=page.image) }})">
+    <header class="masthead" {% if not page.image %} style="height: 200px; background-color: #727272;" {% else %}
+     style="background-image: url({{ url_for('static', filename=page.image) }})" {% endif %}>
       <div class="overlay"></div>
       <div class="container">
         <div class="row">
+          {% if page.image %}
           <div class="col-lg-8 col-md-10 mx-auto">
-            <div class="site-heading">
+              <div class="site-heading">
+          {% else %}
+          <div class="col-lg-8 col-md-10 mx-auto">
+              <div class="site-heading-no-image">
+          {% endif %}
               <h1>{{page.title}}</h1>
               <span class="subheading">{{page.header}}</span>
             </div>

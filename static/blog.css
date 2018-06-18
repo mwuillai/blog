@@ -208,12 +208,25 @@ header.masthead .site-heading {
   }
 }
 
+@media only screen and (min-width: 768px) {
+  header.masthead .site-heading-no-image {
+    padding: 65px 0;
+  }
+}
+
+header.masthead .site-heading-no-image {
+  padding: 65px 0 150px;
+  color: white;
+}
+
 header.masthead .page-heading,
+header.masthead .site-heading-no-image,
 header.masthead .site-heading {
   text-align: center;
 }
 
 header.masthead .page-heading h1,
+header.masthead .site-heading-no-image h1,
 header.masthead .site-heading h1 {
   font-size: 50px;
   margin-top: 0;
@@ -229,9 +242,19 @@ header.masthead .site-heading .subheading {
   font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
+header.masthead .site-heading-no-image .subheading {
+  font-size: 20px;
+  font-weight: 300;
+  line-height: 0.2;
+  display: block;
+  margin: 10px 0 0;
+  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
 @media only screen and (min-width: 768px) {
   header.masthead .page-heading h1,
-  header.masthead .site-heading h1 {
+  header.masthead .site-heading h1,
+  header.masthead .site-heading-no-image h1 {
     font-size: 80px;
   }
 }
